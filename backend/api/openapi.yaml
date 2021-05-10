@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: 5GSDigitalEntityNBI API
+  description: NBI for 5GS Digital Entity
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /subscription/{ueID}:
+    get:
+      summary: get UE subscription information
+      description: |
+        get UE subscription information (SM-Data)
+      operationId: getSubscriptionInfo
+      parameters:
+      - name: ueID
+        in: path
+        description: Unique ID of the UE
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: ./ts/TS29571_CommonData.yaml#/components/schemas/Supi
+      responses:
+        "200":
+          description: The requested informations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionData'
+                x-content-type: application/json
+        "404":
+          description: No requirment found
+      x-swagger-router-controller: SubscriptionData
+components:
+  schemas:
+    SubscriptionData:
+      type: object
+      properties:
+        field1:
+          type: integer
+        field2:
+          type: string
+        field3:
+          type: string
+      example:
+        field1: 0
+        field3: field3
+        field2: field2
