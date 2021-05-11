@@ -34,8 +34,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/SubscriptionData'
                 x-content-type: application/json
-        "404":
-          description: No requirment found
+        default:
+          description: Generic-error
       x-swagger-router-controller: SubscriptionData
 components:
   schemas:
