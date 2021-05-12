@@ -1,18 +1,17 @@
 'use strict';
+const logger = require('../../utils/logger');
 const http2 = require('http2');
-const querystring = require('querystring');
+const errorHandler = require('./ErrorHandler')
 
-function makeARequest(clientAddress, requestPath, onSuccess) {
+function makeARequest(clientAddress, method, requestPath, onSuccess) {
     return new Promise((resolve, reject) => {
         //Technical debdt: use dns or make nrf transport address an external parameter. TODO: fix
         let client = http2.connect(clientAddress);
-        let nrfRequest = client.request({ ':method': 'GET', ':path': requestPath });
+        let nrfRequest = client.request({ ':method': method, ':path': requestPath });
         nrfRequest.on('response', (responseHeaders) => {
             let status = responseHeaders[':status']
             if (status !== 200) {
-                reject({
-                    description: "Generic-error"
-                });
+                reject(errorHandler.handleError(responseHeaders));
                 client.destroy();
             } else {
                 let data = '';
@@ -32,7 +31,9 @@ function makeARequest(clientAddress, requestPath, onSuccess) {
  * @returns a promise resolved with the component URI in NRF or rejected with a generic error
  */
 module.exports.getCoreComponentInstanceURI = (component) => {
+    logger.info(`Obtaining ${component} instance exposed service`);
     return makeARequest('http://127.0.0.10:7777',
+        'GET',
         `/nnrf-nfm/v1/nf-instances?nf-type=${component}`,
         data => data._links.items[0].href.split(/:[0-9]+/)[1])
 }
@@ -44,7 +45,9 @@ module.exports.getCoreComponentInstanceURI = (component) => {
  */
 module.exports.getCoreComponentServicesInfo = (componentURI) => {
     //Technical debdt: get first element of ipEndPoints and versions. TODO: validate correctness.
+    logger.info(`Obtaining ${componentURI} exposed service`);
     return makeARequest('http://127.0.0.10:7777',
+        'GET',
         `${componentURI}`,
         data => {
             let nfServices = data.nfServices
@@ -67,14 +70,17 @@ module.exports.getUESubscriptionData = function(ueImsi, clientAddress, partialRe
      * this is not true. Thus /subscription-data/{ue-imsi}/{plmnid}/provisioned-data/am-data is needed.
      */
     //TODO: Refactoring
+    logger.info(`Obtaining ${ueImsi} subscription data`);
     let homePLMNI = ueImsi.split("-")[1].substring(0, 6);
     return makeARequest(clientAddress,
+        'GET',
         `${partialRequestPath}/subscription-data/${ueImsi}/${homePLMNI}/provisioned-data/am-data`,
         async amData => {
             let defaultSNssais = amData.nssai.defaultSingleNssais
             let sNssais = amData.nssai.singleNssais
             defaultSNssais = defaultSNssais.map(defaultSNssai => {
                 return makeARequest(clientAddress,
+                    'GET',
                     `${partialRequestPath}/subscription-data/${ueImsi}/${homePLMNI}/provisioned-data/sm-data?single-nssai=${encodeURIComponent(JSON.stringify(defaultSNssai))}`,
                     smDataDefaultSNssai => smDataDefaultSNssai.dnnConfigurations).then(dnnConfiguration => {
                     defaultSNssai["dnnConfigurations"] = dnnConfiguration;
@@ -83,6 +89,7 @@ module.exports.getUESubscriptionData = function(ueImsi, clientAddress, partialRe
             });
             sNssais = sNssais.map(sNssai => {
                 return makeARequest(clientAddress,
+                    'GET',
                     `${partialRequestPath}/subscription-data/${ueImsi}/${homePLMNI}/provisioned-data/sm-data?single-nssai=${encodeURIComponent(JSON.stringify(sNssai))}`,
                     smDataSNssai => smDataSNssai.dnnConfigurations).then(dnnConfiguration => {
                     sNssai["dnnConfigurations"] = dnnConfiguration;

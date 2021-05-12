@@ -4,7 +4,7 @@ require('dotenv').config({ path: process.env.NODE_ENV === 'development' ? './.en
 var path = require('path');
 var http = require('http');
 var oas3Tools = require('oas3-tools');
-var serverPort = 8080;
+var serverPort = process.env.PORT;
 
 global.logger = require('./utils/logger');
 
