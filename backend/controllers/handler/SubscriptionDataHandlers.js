@@ -52,7 +52,6 @@ module.exports.getCoreComponentServicesInfo = (componentURI) => {
         data => {
             let nfServices = data.nfServices
             let response = {}
-                //TODO: Change array to a map serviceName => {address, partialPath}
             nfServices.forEach(nfService => {
                 let ipEndPoint = nfService.ipEndPoints[0]
                 response[nfService.serviceName] = {
@@ -76,8 +75,8 @@ module.exports.getUESubscriptionData = function(ueImsi, clientAddress, partialRe
         'GET',
         `${partialRequestPath}/subscription-data/${ueImsi}/${homePLMNI}/provisioned-data/am-data`,
         async amData => {
-            let defaultSNssais = amData.nssai.defaultSingleNssais
-            let sNssais = amData.nssai.singleNssais
+            let defaultSNssais = amData.nssai.defaultSingleNssais ? amData.nssai.defaultSingleNssais : []
+            let sNssais = amData.nssai.singleNssais ? amData.nssai.singleNssais : []
             defaultSNssais = defaultSNssais.map(defaultSNssai => {
                 return makeARequest(clientAddress,
                     'GET',
