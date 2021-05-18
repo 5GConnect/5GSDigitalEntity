@@ -36,6 +36,7 @@ paths:
       x-swagger-router-controller: SubscriptionData
 components:
   schemas:
+
     SubscriptionData:
       type: object
       properties:
@@ -43,73 +44,7 @@ components:
           $ref: '#/components/schemas/AmbrRm'
         nssai:
           $ref: '#/components/schemas/Nssai'
-      example:
-        nssai:
-          defaultSingleNssais:
-          - dnnConfigurations:
-              sessionAmbr:
-                uplink: uplink
-                downlink: null
-              "5gQosProfile":
-                priorityLevel: 76
-                "5qi": 153
-                arp:
-                  priorityLevel: 3
-                  preemptCap: ""
-                  preemptVuln: ""
-              sscModes:
-                allowedSscModes:
-                - null
-                - null
-                defaultSscMode: ""
-              pduSessionTypes:
-                defaultSessionType: ""
-                allowedSessionTypes:
-                - null
-                - null
-              staticIpAddress:
-              - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-                ipv4Addr: 198.51.100.1
-                ipv6Prefix: 2001:db8:abcd:12::0/64
-              - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-                ipv4Addr: 198.51.100.1
-                ipv6Prefix: 2001:db8:abcd:12::0/64
-            sd: sd
-            sst: 20
-          - dnnConfigurations:
-              sessionAmbr:
-                uplink: uplink
-                downlink: null
-              "5gQosProfile":
-                priorityLevel: 76
-                "5qi": 153
-                arp:
-                  priorityLevel: 3
-                  preemptCap: ""
-                  preemptVuln: ""
-              sscModes:
-                allowedSscModes:
-                - null
-                - null
-                defaultSscMode: ""
-              pduSessionTypes:
-                defaultSessionType: ""
-                allowedSessionTypes:
-                - null
-                - null
-              staticIpAddress:
-              - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-                ipv4Addr: 198.51.100.1
-                ipv6Prefix: 2001:db8:abcd:12::0/64
-              - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-                ipv4Addr: 198.51.100.1
-                ipv6Prefix: 2001:db8:abcd:12::0/64
-            sd: sd
-            sst: 20
-          singleNssais:
-          - null
-          - null
-        subscribedUeAmbr: ""
+
     Nssai:
       required:
       - defaultSingleNssais
@@ -126,71 +61,7 @@ components:
           items:
             $ref: '#/components/schemas/EnhancedSnssai'
       nullable: true
-      example:
-        defaultSingleNssais:
-        - dnnConfigurations:
-            sessionAmbr:
-              uplink: uplink
-              downlink: null
-            "5gQosProfile":
-              priorityLevel: 76
-              "5qi": 153
-              arp:
-                priorityLevel: 3
-                preemptCap: ""
-                preemptVuln: ""
-            sscModes:
-              allowedSscModes:
-              - null
-              - null
-              defaultSscMode: ""
-            pduSessionTypes:
-              defaultSessionType: ""
-              allowedSessionTypes:
-              - null
-              - null
-            staticIpAddress:
-            - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-              ipv4Addr: 198.51.100.1
-              ipv6Prefix: 2001:db8:abcd:12::0/64
-            - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-              ipv4Addr: 198.51.100.1
-              ipv6Prefix: 2001:db8:abcd:12::0/64
-          sd: sd
-          sst: 20
-        - dnnConfigurations:
-            sessionAmbr:
-              uplink: uplink
-              downlink: null
-            "5gQosProfile":
-              priorityLevel: 76
-              "5qi": 153
-              arp:
-                priorityLevel: 3
-                preemptCap: ""
-                preemptVuln: ""
-            sscModes:
-              allowedSscModes:
-              - null
-              - null
-              defaultSscMode: ""
-            pduSessionTypes:
-              defaultSessionType: ""
-              allowedSessionTypes:
-              - null
-              - null
-            staticIpAddress:
-            - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-              ipv4Addr: 198.51.100.1
-              ipv6Prefix: 2001:db8:abcd:12::0/64
-            - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-              ipv4Addr: 198.51.100.1
-              ipv6Prefix: 2001:db8:abcd:12::0/64
-          sd: sd
-          sst: 20
-        singleNssais:
-        - null
-        - null
+
     EnhancedSnssai:
       required:
       - sst
@@ -204,38 +75,11 @@ components:
           pattern: "^[A-Fa-f0-9]{6}$"
           type: string
         dnnConfigurations:
-          $ref: '#/components/schemas/DnnConfiguration'
-      example:
-        dnnConfigurations:
-          sessionAmbr:
-            uplink: uplink
-            downlink: null
-          "5gQosProfile":
-            priorityLevel: 76
-            "5qi": 153
-            arp:
-              priorityLevel: 3
-              preemptCap: ""
-              preemptVuln: ""
-          sscModes:
-            allowedSscModes:
-            - null
-            - null
-            defaultSscMode: ""
-          pduSessionTypes:
-            defaultSessionType: ""
-            allowedSessionTypes:
-            - null
-            - null
-          staticIpAddress:
-          - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-            ipv4Addr: 198.51.100.1
-            ipv6Prefix: 2001:db8:abcd:12::0/64
-          - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-            ipv4Addr: 198.51.100.1
-            ipv6Prefix: 2001:db8:abcd:12::0/64
-        sd: sd
-        sst: 20
+          description: A map (list of key-value pairs where Dnn, or optionally the Wildcard DNN, serves as key) of DnnConfigurations
+          type: object
+          additionalProperties:
+             $ref: '#/components/schemas/DnnConfiguration'
+
     DnnConfiguration:
       required:
       - pduSessionTypes
@@ -256,34 +100,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IpAddress'
-      example:
-        sessionAmbr:
-          uplink: uplink
-          downlink: null
-        "5gQosProfile":
-          priorityLevel: 76
-          "5qi": 153
-          arp:
-            priorityLevel: 3
-            preemptCap: ""
-            preemptVuln: ""
-        sscModes:
-          allowedSscModes:
-          - null
-          - null
-          defaultSscMode: ""
-        pduSessionTypes:
-          defaultSessionType: ""
-          allowedSessionTypes:
-          - null
-          - null
-        staticIpAddress:
-        - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-          ipv4Addr: 198.51.100.1
-          ipv6Prefix: 2001:db8:abcd:12::0/64
-        - ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-          ipv4Addr: 198.51.100.1
-          ipv6Prefix: 2001:db8:abcd:12::0/64
+
     IpAddress:
       type: object
       properties:
@@ -293,10 +110,6 @@ components:
           $ref: '#/components/schemas/Ipv6Addr'
         ipv6Prefix:
           $ref: '#/components/schemas/Ipv6Prefix'
-      example:
-        ipv6Addr: 2001:db8:85a3::8a2e:370:7334
-        ipv4Addr: 198.51.100.1
-        ipv6Prefix: 2001:db8:abcd:12::0/64
       oneOf:
       - required:
         - ipv4Addr
@@ -304,6 +117,7 @@ components:
         - ipv6Addr
       - required:
         - ipv6Prefix
+
     PduSessionTypes:
       required:
       - defaultSessionType
@@ -316,11 +130,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PduSessionType'
-      example:
-        defaultSessionType: ""
-        allowedSessionTypes:
-        - null
-        - null
+
     SscModes:
       required:
       - defaultSscMode
@@ -329,23 +139,21 @@ components:
         defaultSscMode:
           $ref: '#/components/schemas/SscMode'
         allowedSscModes:
-          maxItems: 2
+          maxItems: 3
           minItems: 1
           type: array
           items:
             $ref: '#/components/schemas/SscMode'
-      example:
-        allowedSscModes:
-        - null
-        - null
-        defaultSscMode: ""
+
     Supi:
       pattern: "^(imsi-[0-9]{5,15}|nai-.+|gci-.+|gli-.+|.+)$"
       type: string
+
     AmbrRm:
       anyOf:
       - $ref: '#/components/schemas/Ambr'
       - $ref: '#/components/schemas/NullValue'
+
     Ambr:
       required:
       - downlink
@@ -356,16 +164,16 @@ components:
           $ref: '#/components/schemas/BitRate'
         downlink:
           $ref: '#/components/schemas/BitRate'
-      example:
-        uplink: uplink
-        downlink: null
+
     BitRate:
       pattern: ^\d+(\.\d+)? (bps|Kbps|Mbps|Gbps|Tbps)$
       type: string
+
     NullValue:
       type: string
       enum:
       - null
+
     SubscribedDefaultQos:
       required:
       - 5qi
@@ -378,17 +186,12 @@ components:
           $ref: '#/components/schemas/Arp'
         priorityLevel:
           $ref: '#/components/schemas/5QiPriorityLevel'
-      example:
-        priorityLevel: 76
-        "5qi": 153
-        arp:
-          priorityLevel: 3
-          preemptCap: ""
-          preemptVuln: ""
+
     "5Qi":
       maximum: 255
       minimum: 0
       type: integer
+
     Arp:
       required:
       - preemptCap
@@ -402,16 +205,13 @@ components:
           $ref: '#/components/schemas/PreemptionCapability'
         preemptVuln:
           $ref: '#/components/schemas/PreemptionVulnerability'
-      example:
-        priorityLevel: 3
-        preemptCap: ""
-        preemptVuln: ""
+
     ArpPriorityLevel:
       maximum: 15
       minimum: 1
       type: integer
       description: nullable true shall not be used for this attribute
-      nullable: true
+
     PreemptionCapability:
       anyOf:
       - type: string
@@ -419,6 +219,7 @@ components:
         - NOT_PREEMPT
         - MAY_PREEMPT
       - type: string
+
     PreemptionVulnerability:
       anyOf:
       - type: string
@@ -426,28 +227,30 @@ components:
         - NOT_PREEMPTABLE
         - PREEMPTABLE
       - type: string
+
     "5QiPriorityLevel":
       maximum: 127
       minimum: 1
       type: integer
+
     Ipv4Addr:
       pattern: "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$"
       type: string
-      example: 198.51.100.1
+
     Ipv6Addr:
       type: string
-      example: 2001:db8:85a3::8a2e:370:7334
       allOf:
       - pattern: "^((:|(0?|([1-9a-f][0-9a-f]{0,3}))):)((0?|([1-9a-f][0-9a-f]{0,3})):){0,6}(:|(0?|([1-9a-f][0-9a-f]{0,3})))$"
       - pattern: "^((([^:]+:){7}([^:]+))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?))$"
+
     Ipv6Prefix:
       type: string
-      example: 2001:db8:abcd:12::0/64
       allOf:
       - pattern: "^((:|(0?|([1-9a-f][0-9a-f]{0,3}))):)((0?|([1-9a-f][0-9a-f]{0,3})):){0,6}(:|(0?|([1-9a-f][0-9a-f]{0,3})))(\\\
           /(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))$"
       - pattern: "^((([^:]+:){7}([^:]+))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?))(\\\
           /.+)$"
+
     PduSessionType:
       anyOf:
       - type: string
@@ -458,6 +261,7 @@ components:
         - UNSTRUCTURED
         - ETHERNET
       - type: string
+
     SscMode:
       anyOf:
       - type: string

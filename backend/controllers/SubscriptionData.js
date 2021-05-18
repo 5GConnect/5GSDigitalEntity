@@ -2,12 +2,12 @@
 const handler = require('./handler/SubscriptionDataHandlers')
 const logger = require('../utils/logger');
 
-module.exports.getSubscriptionInfo = function getSubscriptionInfo(req, res, next, ueID) {
+module.exports.getSubscriptionInfo = function getSubscriptionInfo(req, res, next) {
     handler.getCoreComponentInstanceURI('UDR')
         .then(componentURI => {
             handler.getCoreComponentServicesInfo(componentURI)
                 .then(services => {
-                    handler.getUESubscriptionData(ueID, services['nudr-dr'].address, services['nudr-dr'].partialPath).then(
+                    handler.getUESubscriptionData(req.params.ueID, services['nudr-dr'].address, services['nudr-dr'].partialPath).then(
                         data => {
                             logger.verbose(`Sending response: ${JSON.stringify(data)}`);
                             res.status(200).send(data)
