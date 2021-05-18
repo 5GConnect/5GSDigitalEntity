@@ -34,6 +34,6 @@ app.use(express.json())
 oasTools.initialize(oasDoc, app, function() {
     // Initialize the Swagger middleware
     http.createServer(app).listen(serverPort, function() {
-        logger.info('Your server is listening on port %d', serverPort);
+        logger.info(`Your server is listening on port ${serverPort}`);
     });
 });
