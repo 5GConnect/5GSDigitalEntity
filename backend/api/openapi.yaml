@@ -56,7 +56,7 @@ components:
           items:
             $ref: '#/components/schemas/EnhancedSnssai'
         singleNssais:
-          minItems: 1
+          minItems: 0
           type: array
           items:
             $ref: '#/components/schemas/EnhancedSnssai'
