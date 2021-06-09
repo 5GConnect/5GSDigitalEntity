@@ -32,7 +32,7 @@ function makeARequest(clientAddress, method, requestPath, onSuccess) {
  */
 module.exports.getCoreComponentInstanceURI = (component) => {
     logger.info(`Obtaining ${component} instance exposed service`);
-    return makeARequest('http://127.0.0.10:7777',
+    return makeARequest(process.env.NRF_URL,
         'GET',
         `/nnrf-nfm/v1/nf-instances?nf-type=${component}`,
         data => data._links.items[0].href.split(/:[0-9]+/)[1])
@@ -46,7 +46,7 @@ module.exports.getCoreComponentInstanceURI = (component) => {
 module.exports.getCoreComponentServicesInfo = (componentURI) => {
     //Technical debdt: get first element of ipEndPoints and versions. TODO: validate correctness.
     logger.info(`Obtaining ${componentURI} exposed service`);
-    return makeARequest('http://127.0.0.10:7777',
+    return makeARequest(process.env.NRF_URL,
         'GET',
         `${componentURI}`,
         data => {

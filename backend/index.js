@@ -1,6 +1,9 @@
 'use strict';
 
-require('dotenv').config({ path: process.env.NODE_ENV === 'development' ? './.env-dev' : './.env-prod' })
+var dotenv = require('dotenv')
+if (process.env.NODE_ENV === 'development') {
+    dotenv.config({ path: './.env-dev' })
+}
 var path = require('path');
 var http = require('http');
 var cors = require('cors')
