@@ -4,6 +4,6 @@ COPY . /app
 
 WORKDIR /app/backend
 
-RUN npm run install
+RUN npm install
 
 CMD npm run start
