@@ -57,7 +57,7 @@ module.exports.getCoreComponentsInfo = (componentURI) => {
         data => {
             return {
                 instance: data.nfType,
-                instanceStatus: data.nfType,
+                instanceStatus: data.nfStatus,
                 instanceId: data.nfInstanceId,
                 services: data.nfServices
             }
