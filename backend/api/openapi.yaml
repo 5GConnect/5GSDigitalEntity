@@ -9,6 +9,22 @@ info:
 servers:
 - url: http://localhost:8080
 paths:
+  /components:
+    get:
+      summary: get core component information
+      description: |
+        get core component information
+      operationId: getCoreComponentInfo
+      responses:
+        "200":
+          description: The requested informations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentsInfo'
+        default:
+          description: Generic-error
+      x-swagger-router-controller: CoreComponent
   /subscription/{ueID}:
     get:
       summary: get UE subscription information
@@ -36,6 +52,27 @@ paths:
       x-swagger-router-controller: SubscriptionData
 components:
   schemas:
+
+    ComponentsInfo:
+      type: array
+      items:
+        $ref: '#/components/schemas/ComponentInfo'
+      minItems: 0
+
+    ComponentInfo:
+      type: object
+      properties:
+        instance:
+          type: string
+        instanceStatus:
+          type: string
+        instanceId:
+          type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/NFService'
+          minItems: 1
 
     SubscriptionData:
       type: object
@@ -270,3 +307,482 @@ components:
         - SSC_MODE_2
         - SSC_MODE_3
       - type: string
+
+    ServiceName:
+      description: Service names known to NRF
+      anyOf:
+        - type: string
+          enum:
+            - nnrf-nfm
+            - nnrf-disc
+            - nnrf-oauth2
+            - nudm-sdm
+            - nudm-uecm
+            - nudm-ueau
+            - nudm-ee
+            - nudm-pp
+            - nudm-niddau
+            - nudm-mt
+            - namf-comm
+            - namf-evts
+            - namf-mt
+            - namf-loc
+            - nsmf-pdusession
+            - nsmf-event-exposure
+            - nsmf-nidd
+            - nausf-auth
+            - nausf-sorprotection
+            - nausf-upuprotection
+            - nnef-pfdmanagement
+            - nnef-smcontext
+            - nnef-eventexposure
+            - npcf-am-policy-control
+            - npcf-smpolicycontrol
+            - npcf-policyauthorization
+            - npcf-bdtpolicycontrol
+            - npcf-eventexposure
+            - npcf-ue-policy-control
+            - nsmsf-sms
+            - nnssf-nsselection
+            - nnssf-nssaiavailability
+            - nudr-dr
+            - nudr-group-id-map
+            - nlmf-loc
+            - n5g-eir-eic
+            - nbsf-management
+            - nchf-spendinglimitcontrol
+            - nchf-convergedcharging
+            - nchf-offlineonlycharging
+            - nnwdaf-eventssubscription
+            - nnwdaf-analyticsinfo
+            - ngmlc-loc
+            - nucmf-provisioning
+            - nucmf-uecapabilitymanagement
+            - nhss-sdm
+            - nhss-uecm
+            - nhss-ueau
+            - nhss-ee
+            - nhss-ims-sdm
+            - nhss-ims-uecm
+            - nhss-ims-ueau
+            - nsepp-telescopic
+            - nsoraf-sor
+            - nspaf-secured-packet
+            - nudsf-dr
+            - nnssaaf-nssaa
+            - naanf-akma
+        - type: string
+
+    DateTime:
+      format: date-time
+      type: string
+
+    NFServiceVersion:
+      description: Contains the version details of an NF service
+      type: object
+      required:
+        - apiVersionInUri
+        - apiFullVersion
+      properties:
+        apiVersionInUri:
+          type: string
+        apiFullVersion:
+          type: string
+        expiry:
+          $ref: '#/components/schemas/DateTime'
+
+    UriScheme:
+      anyOf:
+        - type: string
+          enum:
+            - http
+            - https
+        - type: string
+
+    NFServiceStatus:
+      description: Status of a given NF Service Instance of an NF Instance stored in NRF
+      anyOf:
+        - type: string
+          enum:
+            - REGISTERED
+            - SUSPENDED
+            - UNDISCOVERABLE
+        - type: string
+
+    Fqdn:
+      description: Fully Qualified Domain Name
+      type: string
+
+    TransportProtocol:
+      description: Types of transport protocol used in a given IP endpoint of an NF Service Instance
+      anyOf:
+        - type: string
+          enum:
+            - TCP
+        - type: string
+
+    IpEndPoint:
+      description: IP addressing information of a given NFService; it consists on, e.g. IP address, TCP port, transport protocol...
+      type: object
+      properties:
+        ipv4Address:
+          $ref: '#/components/schemas/Ipv4Addr'
+        ipv6Address:
+          $ref: '#/components/schemas/Ipv6Addr'
+        transport:
+          $ref: '#/components/schemas/TransportProtocol'
+        port:
+          type: integer
+          minimum: 0
+          maximum: 65535
+
+    NotificationType:
+      description: Types of notifications used in Default Notification URIs in the NF Profile of an NF Instance
+      anyOf:
+        - type: string
+          enum:
+            - N1_MESSAGES
+            - N2_INFORMATION
+            - LOCATION_NOTIFICATION
+            - DATA_REMOVAL_NOTIFICATION
+            - DATA_CHANGE_NOTIFICATION
+            - LOCATION_UPDATE_NOTIFICATION
+            - NSSAA_REAUTH_NOTIFICATION
+            - NSSAA_REVOC_NOTIFICATION
+        - type: string
+
+    Uri:
+      type: string
+
+    N2InformationClass:
+      anyOf:
+      - type: string
+        enum:
+          - SM
+          - NRPPa
+          - PWS
+          - PWS-BCAL
+          - PWS-RF
+          - RAN
+          - V2X
+      - type: string
+
+    N1MessageClass:
+      anyOf:
+      - type: string
+        enum:
+          - 5GMM
+          - SM
+          - LPP
+          - SMS
+          - UPDP
+          - LCS
+      - type: string
+
+    DefaultNotificationSubscription:
+      description: Data structure for specifying the notifications the NF service subscribes by default along with callback URI
+      type: object
+      required:
+        - notificationType
+        - callbackUri
+      properties:
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        callbackUri:
+          $ref: '#/components/schemas/Uri'
+        n1MessageClass:
+          $ref: '#/components/schemas/N1MessageClass'
+        n2InformationClass:
+          $ref: '#/components/schemas/N2InformationClass'
+        versions:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        binding:
+          type: string
+
+    Mcc:
+      type: string
+      pattern: '^\d{3}$'
+
+    Mnc:
+      type: string
+      pattern: '^\d{2,3}$'
+
+    PlmnId:
+      type: object
+      properties:
+        mcc:
+          $ref: '#/components/schemas/Mcc'
+        mnc:
+          $ref: '#/components/schemas/Mnc'
+      required:
+        - mcc
+        - mnc
+
+    PlmnIdNid:
+      type: object
+      required:
+        - mcc
+        - mnc
+      properties:
+        mcc:
+          $ref: '#/components/schemas/Mcc'
+        mnc:
+          $ref: '#/components/schemas/Mnc'
+        nid:
+          $ref: '#/components/schemas/Nid'
+
+    PlmnSnssai:
+      description: List of network slices (S-NSSAIs) for a given PLMN ID
+      type: object
+      required:
+        - plmnId
+        - sNssaiList
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/PlmnId'
+        sNssaiList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtSnssai'
+          minItems: 1
+        nid:
+          $ref: '#/components/schemas/Nid'
+
+    Nid:
+      type: string
+      pattern: '^[A-Fa-f0-9]{11}$'
+
+    NFType:
+      description: NF types known to NRF
+      anyOf:
+        - type: string
+          enum:
+            - NRF
+            - UDM
+            - AMF
+            - SMF
+            - AUSF
+            - NEF
+            - PCF
+            - SMSF
+            - NSSF
+            - UDR
+            - LMF
+            - GMLC
+            - 5G_EIR
+            - SEPP
+            - UPF
+            - N3IWF
+            - AF
+            - UDSF
+            - BSF
+            - CHF
+            - NWDAF
+            - PCSCF
+            - CBCF
+            - HSS
+            - UCMF
+            - SOR_AF
+            - SPAF
+            - MME
+            - SCSAS
+            - SCEF
+            - SCP
+            - NSSAAF
+            - ICSCF
+            - SCSCF
+            - DRA
+            - AANF
+        - type: string
+
+    Snssai:
+      type: object
+      properties:
+        sst:
+          type: integer
+          minimum: 0
+          maximum: 255
+        sd:
+          type: string
+          pattern: '^[A-Fa-f0-9]{6}$'
+      required:
+        - sst
+
+    SdRange:
+      description: A range of SDs (Slice Differentiators)
+      type: object
+      properties:
+        start:
+          type: string
+          pattern: '^[A-Fa-f0-9]{6}$'
+        end:
+          type: string
+          pattern: '^[A-Fa-f0-9]{6}$'
+
+    SnssaiExtension:
+      description: Extensions to the Snssai data type
+      type: object
+      properties:
+        sdRanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/SdRange'
+          minItems: 1
+        wildcardSd:
+          type: boolean
+          default: false
+
+    ExtSnssai:
+      allOf:
+        - $ref: '#/components/schemas/Snssai'
+        - $ref: '#/components/schemas/SnssaiExtension'
+
+    SupportedFeatures:
+      type: string
+      pattern: '^[A-Fa-f0-9]*$'
+
+    NfServiceSetId:
+      type: string
+
+    VendorId:
+      description: Vendor ID of the NF Service instance (Private Enterprise Number assigned by IANA)
+      type: string
+      pattern: '^[0-9]{6}$'
+
+    VendorSpecificFeature:
+      description: Information about a vendor-specific feature
+      type: object
+      required:
+        - featureName
+        - featureVersion
+      properties:
+        featureName:
+          type: string
+        featureVersion:
+          type: string
+
+    NFService:
+      description: Information of a given NF Service Instance; it is part of the NFProfile of an NF Instance
+      type: object
+      required:
+        - serviceInstanceId
+        - serviceName
+        - versions
+        - scheme
+        - nfServiceStatus
+      properties:
+        serviceInstanceId:
+          type: string
+        serviceName:
+          $ref: '#/components/schemas/ServiceName'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/NFServiceVersion'
+          minItems: 1
+        scheme:
+          $ref: '#/components/schemas/UriScheme'
+        nfServiceStatus:
+          $ref: '#/components/schemas/NFServiceStatus'
+        fqdn:
+          $ref: '#/components/schemas/Fqdn'
+        interPlmnFqdn:
+          $ref: '#/components/schemas/Fqdn'
+        ipEndPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpEndPoint'
+          minItems: 1
+        apiPrefix:
+          type: string
+        defaultNotificationSubscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefaultNotificationSubscription'
+          minItems: 1
+        allowedPlmns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlmnId'
+          minItems: 1
+        allowedSnpns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlmnIdNid'
+          minItems: 1
+        allowedNfTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NFType'
+          minItems: 1
+        allowedNfDomains:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        allowedNssais:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtSnssai'
+          minItems: 1
+        allowedOperationsPerNfType:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            minItems: 1
+        allowedOperationsPerNfInstance:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            minItems: 1
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        capacity:
+          type: integer
+          minimum: 0
+          maximum: 65535
+        load:
+          type: integer
+          minimum: 0
+          maximum: 100
+        loadTimeStamp:
+          $ref: '#/components/schemas/DateTime'
+        recoveryTime:
+          $ref: '#/components/schemas/DateTime'
+        supportedFeatures:
+          $ref: '#/components/schemas/SupportedFeatures'
+        nfServiceSetIdList:
+          type: array
+          items:
+            $ref: '#/components/schemas/NfServiceSetId'
+          minItems: 1
+        sNssais:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtSnssai'
+          minItems: 1
+        perPlmnSnssaiList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlmnSnssai'
+          minItems: 1
+        vendorId:
+          $ref: '#/components/schemas/VendorId'
+        supportedVendorSpecificFeatures:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/VendorSpecificFeature'
+          minProperties: 1
+        oauth2Required:
+          type: boolean

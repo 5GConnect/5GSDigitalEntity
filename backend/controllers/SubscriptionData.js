@@ -1,13 +1,14 @@
 'use strict';
-const handler = require('./handler/SubscriptionDataHandlers')
+const subscriptionDataHandler = require('./handler/SubscriptionDataHandlers')
+const coreComponentInfoHandler = require('./handler/CoreComponentInformationHandler')
 const logger = require('../utils/logger');
 
 module.exports.getSubscriptionInfo = function getSubscriptionInfo(req, res, next) {
-    handler.getCoreComponentInstanceURI('UDR')
+    coreComponentInfoHandler.getCoreComponentInstanceURI('UDR')
         .then(componentURI => {
-            handler.getCoreComponentServicesInfo(componentURI)
+            coreComponentInfoHandler.getCoreComponentServicesInfo(componentURI)
                 .then(services => {
-                    handler.getUESubscriptionData(req.params.ueID, services['nudr-dr'].address, services['nudr-dr'].partialPath).then(
+                    subscriptionDataHandler.getUESubscriptionData(req.params.ueID, services['nudr-dr'].address, services['nudr-dr'].partialPath).then(
                         data => {
                             logger.verbose(`Sending response: ${JSON.stringify(data)}`);
                             res.status(200).send(data)
